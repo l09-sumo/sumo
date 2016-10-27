@@ -1,0 +1,39 @@
+// Definera värden
+#define NEAR 75 //cm
+#define LIGHT_THRESHOLD 50
+#define MAXSPEED 100
+#define TURNSPEED 84
+
+// HUVUDTASKEN
+task main(){
+  // Säg vilken port sensorerna sitter i
+  SetSensorLight(IN_3);
+  SetSensorLowspeed(IN_4);
+
+  // Obligatorisk väntetid (Cuz' tävlingsreglerna said so
+  Wait(5000);
+
+  // En loop så att allt görs om och om igen!
+  while(true){
+    // om ljussensorn säger till
+    if (Sensor(IN_3) < LIGHT_THRESHOLD) {
+
+      // Backa
+      OnRev(OUT_AB, MAXSPEED);
+      Wait(500);
+
+    } else if (SensorUS(IN_4) < NEAR){
+      // Annars om något finns rakt fram inom NEAR radie
+      // KÖR FRAMMÅT
+      OnFwd(OUT_AB, MAXSPEED);
+
+    } else if (Sensor(IN_3) >= LIGHT_THRESHOLD) {
+      // Annars om  ljussensorn inte säger något
+      // rotera
+      OnFwd(OUT_A,TURNSPEED);
+      OnRev(OUT_B,TURNSPEED);
+
+    }
+
+  }
+}
